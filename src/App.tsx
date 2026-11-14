@@ -1,21 +1,18 @@
-import { useEffect } from 'react'
-import { productService } from './db/productService'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import ProtectedRoute from './features/auth/ProtectedRoute'
+import LoginPage from './pages/LoginPage'
+import DashboardPage from './pages/DashboardPage'
 
 export default function App() {
-  useEffect(() => {
-    productService
-      .create({
-        name: 'Laptop',
-        sku: 'lap-001',
-        category: 'Electronics',
-        price: 55000,
-        quantity: 10,
-        status: 'active',
-      })
-      .then(() => productService.getAll())
-      .then(console.log)
-      .catch((e) => console.error(e.message))
-  }, [])
+  return (
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
 
-  return <h1 className="p-4 text-2xl font-bold">Hello Dashboard</h1>
+      <Route element={<ProtectedRoute />}>
+        <Route path="/dashboard" element={<DashboardPage />} />
+      </Route>
+
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+    </Routes>
+  )
 }

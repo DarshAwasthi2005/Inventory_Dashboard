@@ -21,11 +21,14 @@ export const productService = {
   async create(input: ProductInput): Promise<number> {
     const data = productSchema.parse(input) // galat data yahin ruk jayega
     const now = Date.now()
+    let id: number | undefined
     try {
-      return await db.products.add({ ...data, createdAt: now, updatedAt: now })
+      id = await db.products.add({ ...data, createdAt: now, updatedAt: now })
     } catch (err) {
       throw toFriendlyError(err, data.sku)
     }
+    if (id === undefined) throw new Error('Product save nahi ho paya')
+    return id
   },
 
   async update(id: number, input: ProductInput): Promise<void> {

@@ -1,20 +1,24 @@
-import { useAuth } from '../features/auth/useAuth'
+import Navbar from '../components/Navbar'
+import MetricsCards from '../features/products/MetricsCards'
+import ProductsPanel from '../features/products/ProductsPanel'
+import { useProducts } from '../features/products/useProducts'
 
 export default function DashboardPage() {
-  const { user, logout } = useAuth()
+  const products = useProducts()
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold">Dashboard</h1>
-      <p className="mt-2">
-        Welcome, {user?.name} ({user?.role})
-      </p>
-      <button
-        onClick={logout}
-        className="mt-4 rounded bg-gray-800 px-4 py-2 text-white hover:bg-gray-900"
-      >
-        Logout
-      </button>
+    <div className="min-h-screen bg-gray-100">
+      <Navbar />
+      <main className="mx-auto max-w-6xl space-y-6 p-4">
+        {products === undefined ? (
+          <p className="py-10 text-center text-gray-500">Loading...</p>
+        ) : (
+          <>
+            <MetricsCards products={products} />
+            <ProductsPanel products={products} />
+          </>
+        )}
+      </main>
     </div>
   )
 }

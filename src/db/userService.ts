@@ -2,7 +2,7 @@ import { db } from './database'
 import type { SessionUser } from './types'
 import { sha256 } from '../lib/hash'
 
-// Pehli baar ke liye demo users bana deta hai (agar koi user nahi hai)
+// Creates demo users on first use if none exist
 async function seedUsers(): Promise<void> {
   if ((await db.users.count()) > 0) return
 
@@ -29,9 +29,9 @@ export const userService = {
     const user = await db.users.where('email').equals(email.trim().toLowerCase()).first()
     const hash = await sha256(password)
 
-    // Email galat ho ya password, message ek hi: attacker ko hint nahi milta
+    // Use one generic message so the response does not reveal which field was wrong
     if (!user || user.passwordHash !== hash) {
-      throw new Error('Email ya password galat hai')
+      throw new Error('Invalid email or password')
     }
 
     return { id: user.id!, name: user.name, email: user.email, role: user.role }

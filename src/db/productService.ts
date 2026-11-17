@@ -4,9 +4,9 @@ import { productSchema } from '../lib/schemas'
 
 function toFriendlyError(err: unknown, sku: string): Error {
   if (err instanceof Error && err.name === 'ConstraintError') {
-    return new Error(`SKU "${sku}" pehle se exist karta hai`)
+    return new Error(`SKU "${sku}" already exists`)
   }
-  return err instanceof Error ? err : new Error('Kuch galat ho gaya')
+  return err instanceof Error ? err : new Error('Something went wrong. Please try again.')
 }
 
 export const productService = {
@@ -19,7 +19,7 @@ export const productService = {
   },
 
   async create(input: ProductInput): Promise<number> {
-    const data = productSchema.parse(input) // galat data yahin ruk jayega
+    const data = productSchema.parse(input) // invalid input is rejected here
     const now = Date.now()
     let id: number | undefined
     try {
@@ -27,7 +27,7 @@ export const productService = {
     } catch (err) {
       throw toFriendlyError(err, data.sku)
     }
-    if (id === undefined) throw new Error('Product save nahi ho paya')
+    if (id === undefined) throw new Error('Unable to save the product')
     return id
   },
 

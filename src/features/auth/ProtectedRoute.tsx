@@ -6,7 +6,7 @@ export default function ProtectedRoute() {
   const location = useLocation()
 
   if (!user) {
-    // from yaad rakhte hain, taaki login ke baad wahin wapas bhej sakein
+    // Remember the original location to return the user after login
     return <Navigate to="/login" replace state={{ from: location }} />
   }
 

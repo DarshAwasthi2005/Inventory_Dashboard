@@ -5,12 +5,12 @@ import { formatCurrency } from '../../lib/format'
 interface ProductTableProps {
   products: Product[]
   onEdit: (product: Product) => void
-  onDelete?: (product: Product) => void // nahi diya to Delete button hi nahi dikhega
+  onDelete?: (product: Product) => void // when omitted, the Delete button is hidden
 }
 
 export default function ProductTable({ products, onEdit, onDelete }: ProductTableProps) {
   if (products.length === 0) {
-    return <p className="py-10 text-center text-gray-500">Koi product nahi mila.</p>
+    return <p className="py-10 text-center text-gray-500">No products found.</p>
   }
 
   return (

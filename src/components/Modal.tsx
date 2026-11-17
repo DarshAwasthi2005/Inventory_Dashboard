@@ -7,7 +7,7 @@ interface ModalProps {
 }
 
 export default function Modal({ title, onClose, children }: ModalProps) {
-  // Escape dabane par band ho
+  // Close on Escape
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') onClose()

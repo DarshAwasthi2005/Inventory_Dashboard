@@ -5,7 +5,7 @@ import { AuthContext } from './AuthContext'
 
 const STORAGE_KEY = 'inventory-session'
 
-// Refresh karne par bhi login bana rahe, isliye localStorage se padhte hain
+// Restore the session from localStorage so login survives a page refresh
 function loadSession(): SessionUser | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)

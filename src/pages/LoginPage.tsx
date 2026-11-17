@@ -6,8 +6,8 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../features/auth/useAuth'
 
 const loginSchema = z.object({
-  email: z.email('Sahi email daalo'),
-  password: z.string().min(6, 'Password kam se kam 6 characters ka ho'),
+  email: z.email('Enter a valid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
 })
 
 type LoginForm = z.infer<typeof loginSchema>
@@ -28,7 +28,7 @@ export default function LoginPage() {
     (location.state as { from?: { pathname: string } } | null)?.from?.pathname ??
     '/dashboard'
 
-  // Pehle se logged in ho to login page dikhane ka koi matlab nahi
+  // Already signed in: skip the login page
   if (user) return <Navigate to="/dashboard" replace />
 
   async function onSubmit(values: LoginForm) {
@@ -37,7 +37,9 @@ export default function LoginPage() {
       await login(values.email, values.password)
       navigate(from, { replace: true })
     } catch (err) {
-      setServerError(err instanceof Error ? err.message : 'Login nahi ho paya')
+      setServerError(
+        err instanceof Error ? err.message : 'Unable to sign in. Please try again.',
+      )
     }
   }
 
@@ -93,7 +95,7 @@ export default function LoginPage() {
         </button>
 
         <p className="text-xs text-gray-500">
-          Demo: admin@demo.com / admin123 ya user@demo.com / user123
+          Demo accounts: admin@demo.com / admin123 or user@demo.com / user123
         </p>
       </form>
     </div>

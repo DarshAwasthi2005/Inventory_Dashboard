@@ -10,7 +10,7 @@ db.version(1).stores({
   products: '++id, &sku, name, category, status, createdAt',
 })
 
-// Naya table: sirf wahi table likhte hain jo naya ya badla hua hai
+// Schema migration: only new or changed tables are declared
 db.version(2).stores({
   users: '++id, &email',
 })

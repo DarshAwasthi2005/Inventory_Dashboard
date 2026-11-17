@@ -29,7 +29,7 @@ function Field({
 }
 
 interface ProductFormProps {
-  product?: Product // diya to edit mode, nahi diya to add mode
+  product?: Product // when provided the form is in edit mode, otherwise add mode
   onDone: () => void
 }
 
@@ -65,7 +65,7 @@ export default function ProductForm({ product, onDone }: ProductFormProps) {
       }
       onDone()
     } catch (err) {
-      setServerError(err instanceof Error ? err.message : 'Save nahi ho paya')
+      setServerError(err instanceof Error ? err.message : 'Unable to save the product')
     }
   }
 
@@ -81,7 +81,7 @@ export default function ProductForm({ product, onDone }: ProductFormProps) {
 
       <Field label="Category" error={errors.category?.message}>
         <select className={inputClass} {...register('category')}>
-          <option value="">Chuno...</option>
+          <option value="">Select a category</option>
           {CATEGORIES.map((c) => (
             <option key={c} value={c}>
               {c}

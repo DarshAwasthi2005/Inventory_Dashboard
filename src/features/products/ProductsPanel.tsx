@@ -29,7 +29,7 @@ export default function ProductsPanel({ products }: { products: Product[] }) {
   }, [products, query])
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
-  const currentPage = Math.min(page, totalPages) // delete ke baad page bahar na rahe
+  const currentPage = Math.min(page, totalPages) // keep the page in range after deletions
   const visible = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
 
   async function confirmDelete() {
@@ -46,9 +46,9 @@ export default function ProductsPanel({ products }: { products: Product[] }) {
           value={query}
           onChange={(e) => {
             setQuery(e.target.value)
-            setPage(1) // naya search to page 1 se
+            setPage(1) // reset to the first page on a new search
           }}
-          placeholder="Search name, SKU ya category..."
+          placeholder="Search by name, SKU or category"
           aria-label="Search products"
           className="min-w-52 flex-1 rounded border px-3 py-2 text-sm"
         />
@@ -115,7 +115,7 @@ export default function ProductsPanel({ products }: { products: Product[] }) {
       {deleting && (
         <ConfirmDialog
           title="Delete product?"
-          message={`"${deleting.name}" (${deleting.sku}) hamesha ke liye hata diya jayega. Yeh wapas nahi aa sakta.`}
+          message={`"${deleting.name}" (${deleting.sku}) will be permanently deleted. This action cannot be undone.`}
           onConfirm={confirmDelete}
           onCancel={() => setDeleting(null)}
         />

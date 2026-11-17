@@ -25,7 +25,9 @@ export default function ConfirmDialog({
     try {
       await onConfirm()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Kuch galat ho gaya')
+      setError(
+        err instanceof Error ? err.message : 'Something went wrong. Please try again.',
+      )
       setBusy(false)
     }
   }

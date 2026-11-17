@@ -14,9 +14,9 @@ const COLUMNS = [
 
 function escapeCell(value: string | number | undefined): string {
   let text = String(value ?? '')
-  // CSV injection se bachav: Excel "=" ya "+" se shuru cell ko formula samajhta hai
+  // Prevent CSV injection: spreadsheets treat cells starting with = + - @ as formulas
   if (/^[=+\-@]/.test(text)) text = `'${text}`
-  // Comma, quote ya new line ho to cell ko quotes mein band karo
+  // Wrap the cell in quotes if it contains a comma, quote or line break
   if (/[",\n\r]/.test(text)) text = `"${text.replace(/"/g, '""')}"`
   return text
 }
@@ -40,7 +40,7 @@ function downloadFile(content: string, filename: string, mime: string) {
   link.href = url
   link.download = filename
   link.click()
-  URL.revokeObjectURL(url) // memory free karo
+  URL.revokeObjectURL(url) // release the object URL
 }
 
 function stamp(): string {
@@ -48,7 +48,7 @@ function stamp(): string {
 }
 
 export function exportCSV(products: Product[]) {
-  // BOM (\uFEFF) Excel ko batata hai ki file UTF-8 hai
+  // The BOM (\uFEFF) tells Excel the file is UTF-8
   downloadFile(
     '\uFEFF' + toCSV(products),
     `products-${stamp()}.csv`,

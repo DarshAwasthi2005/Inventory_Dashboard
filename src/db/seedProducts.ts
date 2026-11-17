@@ -68,7 +68,7 @@ const SAMPLES: ProductInput[] = [
   },
 ]
 
-// Duplicate SKU wale skip ho jaate hain, isliye dobara chalana safe hai
+// Products with a duplicate SKU are skipped, so this is safe to run repeatedly
 export async function seedProducts(): Promise<number> {
   let added = 0
   for (const sample of SAMPLES) {
@@ -76,7 +76,7 @@ export async function seedProducts(): Promise<number> {
       await productService.create(sample)
       added++
     } catch {
-      // SKU pehle se hai, skip
+      // SKU already exists; skip
     }
   }
   return added

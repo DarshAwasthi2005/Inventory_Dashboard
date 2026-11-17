@@ -11,7 +11,9 @@ export default function DashboardPage() {
       <Navbar />
       <main className="mx-auto max-w-6xl space-y-6 p-4">
         {products === undefined ? (
-          <p className="py-10 text-center text-gray-500">Loading...</p>
+          <p role="status" className="py-10 text-center text-gray-500">
+            Loading products...
+          </p>
         ) : (
           <>
             <MetricsCards products={products} />

@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { AnimatePresence, motion } from 'motion/react'
 import type { Product } from '../../db/types'
 import { productService } from '../../db/productService'
 import { seedProducts } from '../../db/seedProducts'
@@ -39,7 +40,12 @@ export default function ProductsPanel({ products }: { products: Product[] }) {
   }
 
   return (
-    <section className="rounded-xl bg-white p-4 shadow-sm">
+    <motion.section
+      className="rounded-xl bg-white p-4 shadow-sm"
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: 0.25, ease: 'easeOut' }}
+    >
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <input
           type="search"
@@ -50,7 +56,7 @@ export default function ProductsPanel({ products }: { products: Product[] }) {
           }}
           placeholder="Search by name, SKU or category"
           aria-label="Search products"
-          className="min-w-52 flex-1 rounded border px-3 py-2 text-sm"
+          className="min-w-52 flex-1 rounded border px-3 py-2 text-sm transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none"
         />
         <ExportButtons products={filtered} />
         {import.meta.env.DEV && (
@@ -100,26 +106,37 @@ export default function ProductsPanel({ products }: { products: Product[] }) {
         </div>
       </div>
 
-      {isAddOpen && (
-        <Modal title="Add product" onClose={() => setIsAddOpen(false)}>
-          <ProductForm onDone={() => setIsAddOpen(false)} />
-        </Modal>
-      )}
+      <AnimatePresence>
+        {isAddOpen && (
+          <Modal
+            key="add-product"
+            title="Add product"
+            onClose={() => setIsAddOpen(false)}
+          >
+            <ProductForm onDone={() => setIsAddOpen(false)} />
+          </Modal>
+        )}
+      </AnimatePresence>
 
-      {editing && (
-        <Modal title="Edit product" onClose={() => setEditing(null)}>
-          <ProductForm product={editing} onDone={() => setEditing(null)} />
-        </Modal>
-      )}
+      <AnimatePresence>
+        {editing && (
+          <Modal key="edit-product" title="Edit product" onClose={() => setEditing(null)}>
+            <ProductForm product={editing} onDone={() => setEditing(null)} />
+          </Modal>
+        )}
+      </AnimatePresence>
 
-      {deleting && (
-        <ConfirmDialog
-          title="Delete product?"
-          message={`"${deleting.name}" (${deleting.sku}) will be permanently deleted. This action cannot be undone.`}
-          onConfirm={confirmDelete}
-          onCancel={() => setDeleting(null)}
-        />
-      )}
-    </section>
+      <AnimatePresence>
+        {deleting && (
+          <ConfirmDialog
+            key="delete-product"
+            title="Delete product?"
+            message={`"${deleting.name}" (${deleting.sku}) will be permanently deleted. This action cannot be undone.`}
+            onConfirm={confirmDelete}
+            onCancel={() => setDeleting(null)}
+          />
+        )}
+      </AnimatePresence>
+    </motion.section>
   )
 }

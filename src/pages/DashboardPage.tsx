@@ -3,6 +3,21 @@ import MetricsCards from '../features/products/MetricsCards'
 import ProductsPanel from '../features/products/ProductsPanel'
 import { useProducts } from '../features/products/useProducts'
 
+// Placeholder that mirrors the final layout while data loads
+function DashboardSkeleton() {
+  return (
+    <div role="status" aria-live="polite">
+      <span className="sr-only">Loading products...</span>
+      <div className="grid gap-4 sm:grid-cols-3">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="h-24 animate-pulse rounded-xl bg-white/80" />
+        ))}
+      </div>
+      <div className="mt-6 h-72 animate-pulse rounded-xl bg-white/80" />
+    </div>
+  )
+}
+
 export default function DashboardPage() {
   const products = useProducts()
 
@@ -11,9 +26,7 @@ export default function DashboardPage() {
       <Navbar />
       <main className="mx-auto max-w-6xl space-y-6 p-4">
         {products === undefined ? (
-          <p role="status" className="py-10 text-center text-gray-500">
-            Loading products...
-          </p>
+          <DashboardSkeleton />
         ) : (
           <>
             <MetricsCards products={products} />

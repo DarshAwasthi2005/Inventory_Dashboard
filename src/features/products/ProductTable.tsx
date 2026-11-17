@@ -1,3 +1,4 @@
+import { motion } from 'motion/react'
 import type { Product } from '../../db/types'
 import { LOW_STOCK_THRESHOLD } from '../../lib/constants'
 import { formatCurrency } from '../../lib/format'
@@ -16,7 +17,7 @@ export default function ProductTable({ products, onEdit, onDelete }: ProductTabl
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-left text-sm">
-        <thead className="border-b bg-gray-50 text-xs uppercase text-gray-500">
+        <thead className="border-b bg-gray-50 text-xs text-gray-500 uppercase">
           <tr>
             <th className="px-3 py-2">Name</th>
             <th className="px-3 py-2">SKU</th>
@@ -28,8 +29,14 @@ export default function ProductTable({ products, onEdit, onDelete }: ProductTabl
           </tr>
         </thead>
         <tbody>
-          {products.map((p) => (
-            <tr key={p.id} className="border-b last:border-0">
+          {products.map((p, index) => (
+            <motion.tr
+              key={p.id}
+              className="border-b transition-colors last:border-0 hover:bg-gray-50"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.25, delay: index * 0.04 }}
+            >
               <td className="px-3 py-2 font-medium">{p.name}</td>
               <td className="px-3 py-2 font-mono text-xs">{p.sku}</td>
               <td className="px-3 py-2">{p.category}</td>
@@ -70,7 +77,7 @@ export default function ProductTable({ products, onEdit, onDelete }: ProductTabl
                   </button>
                 )}
               </td>
-            </tr>
+            </motion.tr>
           ))}
         </tbody>
       </table>

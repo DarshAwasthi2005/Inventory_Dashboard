@@ -33,3 +33,10 @@ export interface SessionUser {
   email: string
   role: Role
 }
+
+// Data collected when a new account is created
+export interface NewUserInput {
+  name: string
+  email: string
+  password: string
+}

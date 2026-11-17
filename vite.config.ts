@@ -7,5 +7,6 @@ export default defineConfig({
   test: {
     environment: 'node',
     setupFiles: ['./src/test/setup.ts'],
+    testTimeout: 30_000, // password hashing is intentionally slow
   },
 })

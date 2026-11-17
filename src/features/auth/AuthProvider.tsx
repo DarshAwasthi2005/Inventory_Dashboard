@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react'
-import type { SessionUser } from '../../db/types'
+import type { NewUserInput, SessionUser } from '../../db/types'
 import { userService } from '../../db/userService'
 import { AuthContext } from './AuthContext'
 
@@ -18,10 +18,17 @@ function loadSession(): SessionUser | null {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<SessionUser | null>(loadSession)
 
-  async function login(email: string, password: string) {
-    const sessionUser = await userService.authenticate(email, password)
+  function startSession(sessionUser: SessionUser) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(sessionUser))
     setUser(sessionUser)
+  }
+
+  async function login(email: string, password: string) {
+    startSession(await userService.authenticate(email, password))
+  }
+
+  async function register(input: NewUserInput) {
+    startSession(await userService.register(input))
   }
 
   function logout() {
@@ -30,7 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   )

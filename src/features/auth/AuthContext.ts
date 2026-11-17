@@ -1,9 +1,10 @@
 import { createContext } from 'react'
-import type { SessionUser } from '../../db/types'
+import type { NewUserInput, SessionUser } from '../../db/types'
 
 export interface AuthContextValue {
   user: SessionUser | null
   login: (email: string, password: string) => Promise<void>
+  register: (input: NewUserInput) => Promise<void>
   logout: () => void
 }
 
